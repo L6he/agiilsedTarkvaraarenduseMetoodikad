@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ee">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Unit Converter</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+                max-width: 500px;
+                margin: auto;
+                background: black;
+                color: white;
+            }
+            h1 {
+                text-align: center;
+            }
+            label {
+                margin-top: 10px;
+                display: block;
+            }
+                select, input, button {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                font-size: 1rem;
+            }
+            button {
+                margin-top: 15px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+            #result {
+                margin-top: 20px;
+                color: coral;
+                font-weight: bold;
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Unit Converter</h1>
+
+        <label for="unitType">Unit Type:</label>
+        <select id="unitType">
+            <option value="length">Length</option>
+            <option value="temperature">Temperature</option>
+            <option value="weight">Weight</option>
+        </select>
+
+        <label for="valueInput">Enter Value:</label>
+        <input type="number" id="valueInput" placeholder="10" />
+
+        <label for="fromUnit">From:</label>
+        <select id="fromUnit"></select>
+
+        <label for="toUnit">To:</label> 
+        <select id="toUnit"></select>
+
+        <button onclick="convert()">CONVERT</button>
+
+        <div id="result"></div>
+
+        <script>
+            const units = {
+            length: ["meters", "feet"],
+            temperature: ["celsius", "fahrenheit"],
+            weight: ["kilograms", "pounds"]
+            };
+
+            function updateUnitOptions() {
+            const unitType = document.getElementById("unitType").value;
+            const fromSelect = document.getElementById("fromUnit");
+            const toSelect = document.getElementById("toUnit");
+
+            fromSelect.innerHTML = "";
+            toSelect.innerHTML = "";
+
+            units[unitType].forEach(unit => {
+                const optionFrom = document.createElement("option");
+                optionFrom.value = unit;
+                optionFrom.textContent = unit.charAt(0).toUpperCase() + unit.slice(1);
+                fromSelect.appendChild(optionFrom);
+
+                const optionTo = document.createElement("option");
+                optionTo.value = unit;
+                optionTo.textContent = unit.charAt(0).toUpperCase() + unit.slice(1);
+                toSelect.appendChild(optionTo);
+            });
+
+            if (toSelect.options.length > 1) {
+                toSelect.selectedIndex = 1;
+            }
+            }
+
+            function convert() {
+            const value = parseFloat(document.getElementById("valueInput").value);
+            const unitType = document.getElementById("unitType").value;
+            const from = document.getElementById("fromUnit").value;
+            const to = document.getElementById("toUnit").value;
+            const resultDiv = document.getElementById("result");
+
+            if (isNaN(value)) {
+                resultDiv.textContent = "Enter a VALID number.";
+                return;
+            }
+
+            let result;
+
+            if (unitType === "length") {
+                if (from === "meters" && to === "feet") {
+                result = value * 3.28084;
+                } else if (from === "feet" && to === "meters") {
+                result = value / 3.28084;
+                } else {
+                result = value;
+                }
+            } else if (unitType === "temperature") {
+                if (from === "celsius" && to === "fahrenheit") {
+                result = value * 9/5 + 32;
+                } else if (from === "fahrenheit" && to === "celsius") {
+                result = (value - 32) * 5/9;
+                } else {
+                result = value;
+                }
+            } else if (unitType === "weight") {
+                if (from === "kilograms" && to === "pounds") {
+                result = value * 2.20462;
+                } else if (from === "pounds" && to === "kilograms") {
+                result = value / 2.20462;
+                } else {
+                result = value;
+                }
+            }
+
+            resultDiv.textContent = `Result: ${result.toFixed(4)} ${to}`;
+            }
+
+            document.getElementById("unitType").addEventListener("change", updateUnitOptions);
+            updateUnitOptions();
+        </script>
+    </body>
+</html>

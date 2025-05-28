@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ee">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Unit Converter</title>
+        <style>
+            body {
+                background-color: black;
+                color: white;
+                margin: 0;
+                padding: 0;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+      /* transition: all 0.5s ease; */
+    }
+        </style>
+    </head>
+
+    <body>
+        <h1>Unit Converter</h1>
+        <label for="valueInput">Enter value:</label>
+        <input type="number" id="valueInput" placeholder="10" /> 
+            <br>
+        <label for="fromUnit">From:</label>
+        <select id="fromUnit">
+            <option value="meters">Meters</option>
+            <option value="feet">Feet</option>
+        </select>
+            <br>
+        <label for="toUnit">To:</label>
+        <select id="toUnit">
+            <option value="feet">Feet</option>
+            <option value="meters">Meters</option>
+        </select>
+            <br>
+        <button onclick="convert()">Convert</button>
+
+        <div id="result"></div>
+
+        <script>
+            function convert() {
+            const value = parseFloat(document.getElementById("valueInput").value);
+            const from = document.getElementById("fromUnit").value;
+            const to = document.getElementById("toUnit").value;
+            const resultDiv = document.getElementById("result");
+
+            if (isNaN(value)) {
+                resultDiv.textContent = "Enter a valid number.";
+                return;
+            }
+
+            let result;
+
+            if (from === "meters" && to === "feet") {
+                result = value * 3.28084;
+            } else if (from === "feet" && to === "meters") {
+                result = value / 3.28084;
+            } else {
+                result = value;
+            }
+
+            resultDiv.textContent = `Result: ${result.toFixed(4)} ${to}`;
+            }
+        </script>
+    </body>
+</html>
